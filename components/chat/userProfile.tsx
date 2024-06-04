@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  Facebook,
+  Instagram,
+  Quote,
+  Twitter,
+  UserX,
+  Youtube,
+} from "lucide-react";
+import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
+
 const notifyMessages = [
   {
     name: "user1",
@@ -32,38 +43,46 @@ type Props = {};
 
 const UserProfile = (props: Props) => {
   return (
-    <div className="w-[20%] mt-5 pl-10 overflow-hidden relative">
-      <div className="bg-white rounded-lg flex flex-col items-center justify-center">
-        <div className="p-5 w-24 h-24 rounded-full object-cover">
-          <img src="/user.svg" alt="profile" />
-        </div>
-        <h4 className="text-[#607d8b] mt-1">3rd rabbit Bot</h4>
-        <p className="italic mt-1 text-xs">
-          <strong>Status : </strong>
-          unstable
-        </p>
-      </div>
+    <div className="w-[20%] ml-4">
+      <div className="bg-white max-h-[96%] h-full rounded-lg flex flex-col items-center justify-between">
+        <div className="items-center flex flex-col ">
+          <div className="border w-24 h-24 rounded-full object-cover my-3">
+            <img src="/user.svg" alt="profile" />
+          </div>
+          <h4 className="text-[#607d8b] mt-1">3rd rabbit Bot</h4>
+          <div className="mt-1 text-xs flex gap-1">
+            <strong>Active : </strong>
+            <p className="italic">5 min ago.</p>
+          </div>
 
-      <div className="bg-white rounded-lg flex flex-col justify-center overflow-y-hidden">
-        <div className="text-center">
-          <h4 className="text-[#607d8b]">Notification</h4>
-        </div>
-        <div className="max-h-[40vh] overflow-y-auto h-full bg-[#e0e5ec] rounded break-words">
-          {/* //todo: map notify-item */}
-          <div>
-            {notifyMessages.map(({ name, message, momentTime }, index) => (
-              <div className="flex flex-col m-1 p-1" key={index}>
-                <p className="text-xs font-semibold bg-white px-2 rounded-sm opacity-70 m-1 text-black w-fit">
-                  {name}
-                </p>
-                <p className="px-2 text-xs mb-1 ml-1 opacity-70 text-[#04c30b]">
-                  <span className="font-bold text-[#607d8b]">{momentTime}</span>
-                  {` : ${message}`}
-                </p>
-              </div>
-            ))}
+          <Separator className="my-6 w-4/5" />
+          <div className="mx-5">
+            <Quote size={20} className="rotate-180" />
+            <p className="my-5 text-xs italic">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+              Voluptatum, excepturi. ✌️
+            </p>
+            <div className="flex justify-between">
+              <div />
+              <Quote size={20} />
+            </div>
+          </div>
+
+          <Separator className="my-6 w-4/5" />
+          <div className="flex gap-2">
+            <Facebook />
+            <Twitter />
+            <Instagram />
+            <Youtube />
           </div>
         </div>
+        <Button
+          className="shadow-sm gap-2 hover:bg-red-700 mb-5"
+          variant="secondary"
+        >
+          <UserX />
+          <div>Block</div>
+        </Button>
       </div>
     </div>
   );

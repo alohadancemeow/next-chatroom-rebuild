@@ -1,7 +1,8 @@
 "use client";
 
-import { LogOut } from "lucide-react";
+import { LogOut, Search } from "lucide-react";
 import { Button } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
 import UserList from "./userList";
 
 const usersList = [
@@ -25,6 +26,26 @@ const usersList = [
     name: "user5",
     momentTime: "2024-06-04",
   },
+  {
+    name: "user6",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user7",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user8",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user9",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user10",
+    momentTime: "2024-06-04",
+  },
 ];
 
 type Props = {};
@@ -33,24 +54,28 @@ const ChatList = (props: Props) => {
   const handleLeave = () => {};
 
   return (
-    <div className="border-r-[#ebe7fb] pt-10 max-h-[90%]">
-      <Button className="mt-3 shadow-sm gap-2" variant="default">
-        <LogOut />
-        <div>Leave ChatRoom</div>
+    <div className="max-h-[90%] mr-2 mb-6 flex flex-col justify-between">
+      <Button className="shadow-sm gap-2 w-full" variant="default">
+        <Search />
+        <div>Find more friends</div>
       </Button>
 
-      <div className="pt-3 px-3 mt-1 text-[#516874]">
-        <h2>Who's in here?</h2>
-      </div>
-
-      <div className="overflow-y-scroll">
+      <ScrollArea className="h-[500px]">
         {
           //todo: map joined users
           usersList.map(({ name, momentTime }, index) => (
             <UserList key={index} username={name} momentTime={momentTime} />
           ))
         }
-      </div>
+      </ScrollArea>
+
+      <Button
+        className="shadow-sm gap-2 w-full hover:bg-red-700"
+        variant="outline"
+      >
+        <LogOut />
+        <div>Leave ChatRoom</div>
+      </Button>
     </div>
   );
 };
