@@ -1,8 +1,14 @@
+"use client";
+
+import useSettingsModal from "@/states/settings-modal";
 import { Settings } from "lucide-react";
+import SettingsDialog from "./settings/settings-dialog";
 
 type Props = {};
 
 const Header = (props: Props) => {
+  const settingsModal = useSettingsModal();
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center justify-center cursor-pointer gap-3">
@@ -12,9 +18,13 @@ const Header = (props: Props) => {
         </p>
       </div>
 
-      <div className="mr-4 cursor-pointer">
+      <div
+        className="mr-4 cursor-pointer"
+        onClick={() => settingsModal.onOpen()}
+      >
         <Settings />
       </div>
+      <SettingsDialog />
     </div>
   );
 };
