@@ -54,13 +54,13 @@ const ChatList = (props: Props) => {
   const handleLeave = () => {};
 
   return (
-    <div className="max-h-[90%] mr-2 mb-6 flex flex-col justify-between">
+    <div className="w-[20%] mb-5 mr-2 flex flex-col gap-6 justify-between">
       <Button className="shadow-sm gap-2 w-full" variant="default">
         <Search />
         <div>Find more friends</div>
       </Button>
 
-      <ScrollArea className="h-[500px]">
+      <ScrollArea className="xl:h-[500px] h-[470px]">
         {
           //todo: map joined users
           usersList.map(({ name, momentTime }, index) => (

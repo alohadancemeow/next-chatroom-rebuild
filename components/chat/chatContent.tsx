@@ -81,9 +81,9 @@ const ChatContent = (props: Props) => {
   const emitMessage = (e: any) => {};
 
   return (
-    <div className="flex flex-grow max-w-[63%] p-5 border border-r-[#ebe7fb] flex-col justify-start">
-      <div className="flex flex-col justify-between h-full max-h-[65vh]">
-        <ScrollArea className="h-[90%]">
+    <div className="flex flex-grow max-w-[63%] rounded p-5 border border-r-[#ebe7fb] flex-col justify-start">
+      <div className="flex flex-col justify-between">
+        <ScrollArea className="h-[530px] xl:h-[540px]">
           {messages.map((item, index) => (
             <ChatItem key={index} message={item} />
           ))}

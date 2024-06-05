@@ -44,7 +44,7 @@ type Props = {};
 const UserProfile = (props: Props) => {
   return (
     <div className="w-[20%] ml-4">
-      <div className="bg-white max-h-[96%] h-full rounded-lg flex flex-col items-center justify-between">
+      <div className="bg-white h-[97%] rounded-lg flex flex-col items-center justify-between">
         <div className="items-center flex flex-col ">
           <div className="border w-24 h-24 rounded-full object-cover my-3">
             <img src="/user.svg" alt="profile" />

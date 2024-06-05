@@ -2,7 +2,7 @@ import { Settings } from "lucide-react";
 
 type Props = {};
 
-const Nav = (props: Props) => {
+const Header = (props: Props) => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center justify-center cursor-pointer gap-3">
@@ -19,4 +19,4 @@ const Nav = (props: Props) => {
   );
 };
 
-export default Nav;
+export default Header;
