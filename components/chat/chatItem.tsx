@@ -1,31 +1,32 @@
 import { cn } from "@/lib/utils";
-import { CheckCheck } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type Props = {
-  message: { name: string; momentTime: string; message: string };
+  user: any;
 };
 
-const ChatItem = ({ message: { message, name, momentTime } }: Props) => {
-  const isSender = name === "user1";
-  const isSeen = true;
+const ChatItem = ({ user }: Props) => {
+  const isSeen = user.name !== "user1";
 
   return (
-    <div className={cn("flex justify-start", isSender && "justify-end")}>
-      <div className="px-2 py-1 break-words">
-        <p
+    <div className="flex items-center gap-3 justify-start p-3 shadow mb-3 rounded bg-white">
+      <Avatar className={cn("w-14 h-14", isSeen && "border-4 border-sky-600")}>
+        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+      <div className="flex justify-center w-full flex-col items-start">
+        <div className="flex gap-1 items-center ">
+          <div className="font-semibold">{user.name}</div>
+          <div>-</div>
+          <div className="text-slate-400 text-xs">{user.momentTime}</div>
+        </div>
+        <div
           className={cn(
-            "opacity-70 m-1 text-xs text-[#0e81ce]",
-            isSender && "text-end"
+            "line-clamp-2 text-slate-400 text-xs",
+            isSeen && "font-semibold text-slate-700"
           )}
         >
-          {`${name} say:`}
-        </p>
-        <p className={cn('px-3 py-1 mb-1 rounded-lg text-white bg-gray-500', isSender && 'bg-sky-600 ')}>{`${message}`}</p>
-        <div
-          className={cn("flex items-center gap-1", isSender && "justify-end")}
-        >
-          {isSeen && <CheckCheck size={14} />}
-          <p className="text-[#777] text-xs font-normal">{momentTime}</p>
+          {user.message}
         </div>
       </div>
     </div>

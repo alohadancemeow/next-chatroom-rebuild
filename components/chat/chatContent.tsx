@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Send, SmilePlus } from "lucide-react";
-import ChatItem from "./chatItem";
+import Message from "./message";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
@@ -36,7 +36,8 @@ const messages = [
   },
   {
     name: "user1",
-    message: "this is a message, this is a message, this is a message, this is a message",
+    message:
+      "this is a message, this is a message, this is a message, this is a message",
     momentTime: "2024-06-04",
   },
   {
@@ -86,17 +87,17 @@ const ChatContent = (props: Props) => {
       <div className="flex flex-col justify-between">
         <ScrollArea className="h-[530px] xl:h-[540px]">
           {messages.map((item, index) => (
-            <ChatItem key={index} message={item} />
+            <Message key={index} message={item} />
           ))}
         </ScrollArea>
 
         <div className="pt-5">
           <div className="bg-white flex p-2 rounded-lg gap-2">
-            <Button variant="outline" size="icon">
+            <Button variant="outline">
               <SmilePlus />
             </Button>
             <Input type="text" placeholder="type a message" />
-            <Button variant="outline" size="icon">
+            <Button variant="outline">
               <Send />
             </Button>
           </div>

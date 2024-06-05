@@ -3,64 +3,79 @@
 import { LogOut, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
-import UserList from "./userList";
+import ChatItem from "./chatItem";
+import useSearchModal from "@/states/search-modal";
+import UserDialog from "../userDialog";
 
 const usersList = [
   {
     name: "user1",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user2",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user3",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user4",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user7",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user6",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user10",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user8",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀",
   },
   {
     name: "user9",
     message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
     momentTime: "5 day ago",
+    bio: "this is a test status 🍀 asdwasdwasd asdw asd sdw ads w",
   },
 ];
 
 type Props = {};
 
 const ChatList = (props: Props) => {
-  const handleLeave = () => {};
+  const searchModal = useSearchModal();
 
   return (
-    <div className="w-[25%] mb-5 mr-2 flex flex-col gap-6 justify-between">
-      <Button className="shadow-sm gap-2 w-full" variant="default">
+    <div className="w-[25%] cursor-pointer mb-5 mr-2 flex flex-col gap-6 justify-between">
+      <Button
+        onClick={() => searchModal.onOpen()}
+        className="shadow-sm gap-2 w-full"
+        variant="default"
+      >
         <Search />
         <div>Find more friends</div>
       </Button>
@@ -69,7 +84,7 @@ const ChatList = (props: Props) => {
         {
           //todo: map joined users
           usersList.map((user, index) => (
-            <UserList key={index} user={user} />
+            <ChatItem key={index} user={user} />
           ))
         }
       </ScrollArea>
@@ -81,6 +96,8 @@ const ChatList = (props: Props) => {
         <LogOut />
         <div>Leave ChatRoom</div>
       </Button>
+
+      <UserDialog users={usersList} />
     </div>
   );
 };
