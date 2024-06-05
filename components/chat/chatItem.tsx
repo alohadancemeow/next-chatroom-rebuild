@@ -1,18 +1,32 @@
-import React from "react";
+import { cn } from "@/lib/utils";
+import { CheckCheck } from "lucide-react";
 
 type Props = {
   message: { name: string; momentTime: string; message: string };
 };
 
 const ChatItem = ({ message: { message, name, momentTime } }: Props) => {
+  const isSender = name === "user1";
+  const isSeen = true;
+
   return (
-    <div className="chat-messages" id="chat-messsage">
-      <div className="px-2 py-1 m-3 bg-white rounded break-words">
-        <p className="font-bold opacity-70 m-1 text-[#0e81ce]">
-          {name}
-          <span className="ml-2 text-[#777]">{momentTime}</span>
+    <div className={cn("flex justify-start", isSender && "justify-end")}>
+      <div className="px-2 py-1 break-words">
+        <p
+          className={cn(
+            "opacity-70 m-1 text-xs text-[#0e81ce]",
+            isSender && "text-end"
+          )}
+        >
+          {`${name} say:`}
         </p>
-        <p className="m-1 font-bold text-black opacity-70 ">{`Say: ${message}`}</p>
+        <p className={cn('px-3 py-1 mb-1 rounded-lg text-white bg-gray-500', isSender && 'bg-sky-600 ')}>{`${message}`}</p>
+        <div
+          className={cn("flex items-center gap-1", isSender && "justify-end")}
+        >
+          {isSeen && <CheckCheck size={14} />}
+          <p className="text-[#777] text-xs font-normal">{momentTime}</p>
+        </div>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const messages = [
   },
   {
     name: "user2",
-    message: "this is a message",
+    message: "this is a message, this is a message, this is a message",
     momentTime: "2024-06-04",
   },
   {
@@ -24,7 +24,28 @@ const messages = [
     momentTime: "2024-06-04",
   },
   {
-    name: "user4",
+    name: "user1",
+    message:
+      "this is a message, this is a message, this is a message, this is a message",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user5",
+    message: "this is a message",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user1",
+    message: "this is a message, this is a message, this is a message, this is a message",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user5",
+    message: "this is a message",
+    momentTime: "2024-06-04",
+  },
+  {
+    name: "user1",
     message: "this is a message",
     momentTime: "2024-06-04",
   },
@@ -34,27 +55,7 @@ const messages = [
     momentTime: "2024-06-04",
   },
   {
-    name: "user5",
-    message: "this is a message",
-    momentTime: "2024-06-04",
-  },
-  {
-    name: "user5",
-    message: "this is a message",
-    momentTime: "2024-06-04",
-  },
-  {
-    name: "user5",
-    message: "this is a message",
-    momentTime: "2024-06-04",
-  },
-  {
-    name: "user5",
-    message: "this is a message",
-    momentTime: "2024-06-04",
-  },
-  {
-    name: "user5",
+    name: "user1",
     message: "this is a message",
     momentTime: "2024-06-04",
   },
