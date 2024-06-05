@@ -8,43 +8,48 @@ import UserList from "./userList";
 const usersList = [
   {
     name: "user1",
-    momentTime: "2024-06-04",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
     name: "user2",
-    momentTime: "2024-06-04",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
-    name: "user1",
-    momentTime: "2024-06-04",
+    name: "user3",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
     name: "user4",
-    momentTime: "2024-06-04",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
-    name: "user1",
-    momentTime: "2024-06-04",
+    name: "user7",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
     name: "user6",
-    momentTime: "2024-06-04",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
-    name: "user1",
-    momentTime: "2024-06-04",
+    name: "user10",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
     name: "user8",
-    momentTime: "2024-06-04",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
   {
     name: "user9",
-    momentTime: "2024-06-04",
-  },
-  {
-    name: "user1",
-    momentTime: "2024-06-04",
+    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+    momentTime: "5 day ago",
   },
 ];
 
@@ -54,7 +59,7 @@ const ChatList = (props: Props) => {
   const handleLeave = () => {};
 
   return (
-    <div className="w-[20%] mb-5 mr-2 flex flex-col gap-6 justify-between">
+    <div className="w-[25%] mb-5 mr-2 flex flex-col gap-6 justify-between">
       <Button className="shadow-sm gap-2 w-full" variant="default">
         <Search />
         <div>Find more friends</div>
@@ -63,8 +68,8 @@ const ChatList = (props: Props) => {
       <ScrollArea className="xl:h-[500px] h-[470px]">
         {
           //todo: map joined users
-          usersList.map(({ name, momentTime }, index) => (
-            <UserList key={index} username={name} momentTime={momentTime} />
+          usersList.map((user, index) => (
+            <UserList key={index} user={user} />
           ))
         }
       </ScrollArea>
