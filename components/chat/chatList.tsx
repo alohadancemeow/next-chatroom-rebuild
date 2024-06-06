@@ -7,6 +7,8 @@ import ChatItem from "./chatItem";
 import useSearchModal from "@/states/search-modal";
 import UserDialog from "../userDialog";
 
+import { auth } from "@/lib/firebase";
+
 const usersList = [
   {
     name: "user1",
@@ -92,6 +94,10 @@ const ChatList = (props: Props) => {
       <Button
         className="shadow-sm gap-2 w-full hover:bg-red-700"
         variant="outline"
+        onClick={() => {
+          auth.signOut();
+          // resetChat();
+        }}
       >
         <LogOut />
         <div>Leave ChatRoom</div>

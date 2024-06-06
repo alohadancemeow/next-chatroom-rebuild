@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,6 +16,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { toast } from "sonner";
+import { RotateCcw } from "lucide-react";
+
 type Props = {
   containerRef?: React.LegacyRef<HTMLDivElement> | undefined;
 };
@@ -25,6 +31,8 @@ const formSchema = z.object({
 });
 
 const Login = ({ containerRef }: Props) => {
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,10 +41,25 @@ const Login = ({ containerRef }: Props) => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setLoading(true);
+
+    const { email, password } = values;
+
+    try {
+      toast.promise(signInWithEmailAndPassword(auth, email, password), {
+        loading: "Signing in...",
+        success: (data) => {
+          return `Signed in successfuly! 🎉`;
+        },
+        error: "Somthing went wrong, Please try again!",
+      });
+    } catch (err) {
+      console.log(err);
+      toast.error("Somthing went wrong, Please try again!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,7 +104,16 @@ const Login = ({ containerRef }: Props) => {
                 )}
               />
               <div className="text-center">
-                <Button type="submit">Sign in</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? (
+                    <div className="flex justify-center items-center">
+                      <RotateCcw className="mr-2 h-4 w-4 animate-spin" />
+                      <div>Sign in...</div>
+                    </div>
+                  ) : (
+                    "Sign in"
+                  )}
+                </Button>
               </div>
             </form>
           </Form>
