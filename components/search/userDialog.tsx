@@ -6,13 +6,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea } from "../ui/scroll-area";
 
 import useSearchModal from "@/states/search-modal";
 import UserItem from "./userItem";
+import { UserSchema } from "@/types";
 
 type Props = {
-  users: any[];
+  users: UserSchema[];
 };
 
 const UserDialog = ({ users }: Props) => {

@@ -5,9 +5,10 @@ import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import ChatItem from "./chatItem";
 import useSearchModal from "@/states/search-modal";
-import UserDialog from "../userDialog";
+import UserDialog from "../search/userDialog";
 
 import { auth } from "@/lib/firebase";
+import useGetUsers from "@/hooks/use-get-users";
 
 const usersList = [
   {
@@ -70,6 +71,7 @@ type Props = {};
 
 const ChatList = (props: Props) => {
   const searchModal = useSearchModal();
+  const { users } = useGetUsers();
 
   return (
     <div className="w-[25%] cursor-pointer mb-5 mr-2 flex flex-col gap-6 justify-between">
@@ -103,7 +105,7 @@ const ChatList = (props: Props) => {
         <div>Leave ChatRoom</div>
       </Button>
 
-      <UserDialog users={usersList} />
+      <UserDialog users={users} />
     </div>
   );
 };

@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 import { MessageCirclePlus } from "lucide-react";
+import { UserSchema } from "@/types";
 
 type Props = {
-  user: any;
+  user: UserSchema;
 };
 
 const UserItem = ({ user }: Props) => {
@@ -12,16 +13,19 @@ const UserItem = ({ user }: Props) => {
     <div className="flex items-center gap-3 justify-between p-3 mb-3 rounded bg-white">
       <div className="flex items-center justify-center gap-2">
         <Avatar className="w-10 h-10">
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage src={user.avatar || "https://github.com/shadcn.png"} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="flex justify-center flex-col">
           <div className="flex gap-1 items-center ">
-            <div className="font-semibold">{user.name}</div>
+            <div className="font-semibold">{user.username || user.email}</div>
             <div>-</div>
-            <div className="text-slate-400 text-xs">{user.momentTime}</div>
+            <div className="text-slate-400 text-xs">{"5 day ago"}</div>
           </div>
-          <div className="line-clamp-1 text-slate-400 text-xs">{user.bio}</div>
+          <div className="line-clamp-1 text-slate-400 text-xs">
+            {user.bio ||
+              `Lorem ipsum dolor sit amet consectetur adipisicing elit.`}
+          </div>
         </div>
       </div>
 

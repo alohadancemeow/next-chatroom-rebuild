@@ -81,7 +81,7 @@ const Register = ({ containerRef }: Props) => {
         blocked: [],
       };
 
-      await setDoc(doc(db, "users", res.user.uid), { userData });
+      await setDoc(doc(db, "users", res.user.uid), { ...userData });
       await setDoc(doc(db, "userchats", res.user.uid), {
         chats: [],
       });
