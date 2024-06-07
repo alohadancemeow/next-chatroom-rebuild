@@ -79,6 +79,7 @@ const Register = ({ containerRef }: Props) => {
         status: "",
         username: email.split("@")[0],
         blocked: [],
+        links: [],
       };
 
       await setDoc(doc(db, "users", res.user.uid), { ...userData });

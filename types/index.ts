@@ -8,6 +8,7 @@ export const userSchema = z.object({
   avatar: z.string().optional(),
   email: z.string().email(),
   blocked: z.string().array().optional(),
+  links: z.string().array().optional(),
 });
 
 export type UserSchema = z.infer<typeof userSchema>;

@@ -14,17 +14,22 @@ import { ScrollArea } from "../ui/scroll-area";
 import useSearchModal from "@/states/search-modal";
 import UserItem from "./userItem";
 import { UserSchema } from "@/types";
+import { useUserStore } from "@/states/user-store";
 
 type Props = {
   users: UserSchema[];
 };
 
 const UserDialog = ({ users }: Props) => {
-  const searchModal = useSearchModal();
   const [username, setUsername] = useState("");
 
+  const { currentUser } = useUserStore();
+  const searchModal = useSearchModal();
+
   const filteredUsers =
-    users.filter((user) => user.username?.includes(username)) ?? users;
+    users.filter(
+      (user) => user.username?.includes(username) && user.id !== currentUser?.id
+    ) ?? users;
 
   return (
     <Dialog open={searchModal.isOpen} onOpenChange={searchModal.onClose}>
