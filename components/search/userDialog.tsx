@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +21,10 @@ type Props = {
 
 const UserDialog = ({ users }: Props) => {
   const searchModal = useSearchModal();
+  const [username, setUsername] = useState("");
+
+  const filteredUsers =
+    users.filter((user) => user.username?.includes(username)) ?? users;
 
   return (
     <Dialog open={searchModal.isOpen} onOpenChange={searchModal.onClose}>
@@ -27,11 +34,15 @@ const UserDialog = ({ users }: Props) => {
           <DialogDescription>
             Go make yourself some friends, or you'll be lonely.
           </DialogDescription>
-          <Input type="text" placeholder="Search..." />
+          <Input
+            type="text"
+            placeholder="Search..."
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </DialogHeader>
         <div className="flex flex-col">
           <ScrollArea className="xl:h-[600px] h-[480px]">
-            {users.map((user, index) => (
+            {filteredUsers.map((user, index) => (
               <UserItem user={user} key={index} />
             ))}
           </ScrollArea>

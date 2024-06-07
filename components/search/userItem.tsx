@@ -23,7 +23,7 @@ const UserItem = ({ user }: Props) => {
             <div className="text-slate-400 text-xs">{"5 day ago"}</div>
           </div>
           <div className="line-clamp-1 text-slate-400 text-xs">
-            {user.bio ||
+            {user.status ||
               `Lorem ipsum dolor sit amet consectetur adipisicing elit.`}
           </div>
         </div>

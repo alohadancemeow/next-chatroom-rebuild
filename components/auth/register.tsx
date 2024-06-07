@@ -77,7 +77,7 @@ const Register = ({ containerRef }: Props) => {
         avatar: "",
         bio: "",
         status: "",
-        username: "",
+        username: email.split("@")[0],
         blocked: [],
       };
 
