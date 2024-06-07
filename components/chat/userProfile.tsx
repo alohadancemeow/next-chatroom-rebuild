@@ -25,8 +25,10 @@ const UserProfile = (props: Props) => {
         </div>
         <h4 className="text-[#607d8b] mt-1">{currentUser?.username}</h4>
         <div className="mt-1 text-xs flex gap-1">
-          <strong>Active : </strong>
-          <p className="italic">5 min ago.</p>
+          {/* <strong>Active : </strong>
+          <p className="italic">5 min ago.</p> */}
+          <strong>Status : </strong>
+          <p className="italic">{currentUser?.status || "Hi there! 👋"}</p>
         </div>
       </div>
 

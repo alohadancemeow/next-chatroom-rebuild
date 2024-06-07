@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { cn } from "@/lib/utils";
 import {
@@ -18,43 +17,39 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
-const profileFormSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Username must not be longer than 30 characters.",
-    }),
-  status: z.string().max(30, {
-    message: "Status must not be longer than 30 characters.",
-  }),
-  bio: z.string().max(160).min(4),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
-      })
-    )
-    .optional(),
-});
-
-type ProfileFormValues = z.infer<typeof profileFormSchema>;
+import { profileFormSchema, ProfileFormValues, UserSchema } from "@/types";
+import { RotateCcw } from "lucide-react";
+import { link } from "fs";
 
 // This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I own a computer.",
-  urls: [
-    { value: "https://shadcn.com" },
-    { value: "http://twitter.com/shadcn" },
-  ],
+// const defaultValues: Partial<ProfileFormValues> = {
+//   bio: "I own a computer.",
+//   urls: [
+//     { value: "https://shadcn.com" },
+//     { value: "http://twitter.com/shadcn" },
+//   ],
+// };
+
+type Props = {
+  currentUser: UserSchema | null;
+  onUpdate: (data: ProfileFormValues) => Promise<void>;
+  loading: boolean;
 };
 
-export function SettingsForm() {
+const SettingsForm = ({ currentUser, onUpdate, loading }: Props) => {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    defaultValues: {
+      username: currentUser?.username || "",
+      status: currentUser?.status || "",
+      bio: currentUser?.bio || "I own a computer.",
+      urls: currentUser?.links?.length
+        ? currentUser.links.map((link) => ({ value: link }))
+        : [
+            { value: "https://shadcn.com" },
+            { value: "http://twitter.com/shadcn" },
+          ],
+    },
     mode: "onChange",
   });
 
@@ -63,7 +58,7 @@ export function SettingsForm() {
     control: form.control,
   });
 
-  function onSubmit(data: ProfileFormValues) {}
+  const onSubmit = (data: ProfileFormValues) => onUpdate(data);
 
   return (
     <Form {...form}>
@@ -155,8 +150,19 @@ export function SettingsForm() {
             Add URL
           </Button>
         </div>
-        <Button type="submit">Update profile</Button>
+        <Button type="submit" disabled={loading}>
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <RotateCcw className="mr-2 h-4 w-4 animate-spin" />
+              <div>Update profile...</div>
+            </div>
+          ) : (
+            "Update profile"
+          )}
+        </Button>
       </form>
     </Form>
   );
-}
+};
+
+export default SettingsForm;
