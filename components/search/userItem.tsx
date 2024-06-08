@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { MessageCirclePlus } from "lucide-react";
@@ -6,9 +5,11 @@ import { UserSchema } from "@/types";
 
 type Props = {
   user: UserSchema;
+  loading: boolean;
+  onCreateChat: (user: UserSchema) => Promise<void>;
 };
 
-const UserItem = ({ user }: Props) => {
+const UserItem = ({ user, loading, onCreateChat }: Props) => {
   return (
     <div className="flex items-center gap-3 justify-between p-3 mb-3 rounded bg-white">
       <div className="flex items-center justify-center gap-2">
@@ -29,7 +30,11 @@ const UserItem = ({ user }: Props) => {
         </div>
       </div>
 
-      <Button variant="default">
+      <Button
+        variant="default"
+        disabled={loading}
+        onClick={() => onCreateChat(user)}
+      >
         <MessageCirclePlus className="h-4 w-4" />
       </Button>
     </div>
