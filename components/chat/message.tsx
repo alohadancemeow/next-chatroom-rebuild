@@ -20,12 +20,16 @@ const Message = ({ message: { message, name, momentTime } }: Props) => {
         >
           {`${name} say:`}
         </p>
-        <p
-          className={cn(
-            "px-3 py-1 mb-1 rounded-lg text-white bg-gray-500",
-            isSender && "bg-sky-600 "
-          )}
-        >{`${message}`}</p>
+        <div className={cn("flex justify-start", isSender && "justify-end")}>
+          <p
+            className={cn(
+              "px-3 py-1 w-fit mb-1 rounded-lg text-white bg-gray-500",
+              isSender && "bg-sky-600"
+            )}
+          >
+            {`${message}`}
+          </p>
+        </div>
         <div
           className={cn("flex items-center gap-1", isSender && "justify-end")}
         >
