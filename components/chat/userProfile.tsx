@@ -15,9 +15,10 @@ const UserProfile = (props: Props) => {
   return (
     <div className="bg-white w-[20%] p-4 ml-4 rounded-lg flex flex-col items-center justify-between">
       <div className="items-center flex flex-col ">
-        <div className="border rounded-full my-3">
-          <Avatar className="object-cover w-24 h-24">
+        <div className="border-[2.5px] rounded-full my-3 border-slate-500">
+          <Avatar className="w-24 h-24">
             <AvatarImage
+              className="object-cover"
               src={currentUser?.avatar || "https://github.com/shadcn.png"}
             />
             <AvatarFallback>CN</AvatarFallback>

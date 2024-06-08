@@ -84,7 +84,7 @@ const ChatList = (props: Props) => {
         <div>Find more friends</div>
       </Button>
 
-      <ScrollArea className="xl:h-[500px] h-[470px]">
+      <ScrollArea className="xl:h-[510px] h-[490px]">
         {
           //todo: map joined users
           usersList.map((user, index) => (
