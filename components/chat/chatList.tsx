@@ -7,74 +7,85 @@ import ChatItem from "./chatItem";
 import useSearchModal from "@/states/search-modal";
 import UserDialog from "../search/userDialog";
 
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import useGetUsers from "@/hooks/use-get-users";
-
-const usersList = [
-  {
-    name: "user1",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user2",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user3",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user4",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user7",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user6",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user10",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user8",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀",
-  },
-  {
-    name: "user9",
-    message: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-    momentTime: "5 day ago",
-    bio: "this is a test status 🍀 asdwasdwasd asdw asd sdw ads w",
-  },
-];
+import { useEffect, useState } from "react";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { useUserStore } from "@/states/user-store";
+import { chatSchema, ChatWithUser, userSchema } from "@/types";
 
 type Props = {};
 
 const ChatList = (props: Props) => {
+  const [chats, setChats] = useState<ChatWithUser[]>([]);
+
+  console.log("chats", chats);
+
   const searchModal = useSearchModal();
   const { users } = useGetUsers();
+  const { currentUser } = useUserStore();
+
+  /* This `useEffect` hook is responsible for fetching and updating the chat data for the current
+    user. Here's a breakdown of what it does: */
+  useEffect(() => {
+    if (!currentUser?.id) return;
+
+    const unSub = onSnapshot(
+      doc(db, "userchats", currentUser?.id!),
+      async (res) => {
+        const items = res?.data()?.chats || [];
+
+        if (!items.length) return;
+
+        const promises = items.map(async (item: any) => {
+          // Validate the item against the schema
+          const validatedItem = chatSchema.safeParse(item);
+          if (!validatedItem.success) {
+            console.error("Invalid item:", validatedItem.error);
+            return null; // or handle the invalid item appropriately
+          }
+
+          const userDocRef = doc(db, "users", validatedItem.data.receiverId);
+          const userDocSnap = await getDoc(userDocRef);
+
+          // Validate the user data against the user schema
+          const userData = userDocSnap.data();
+          const validatedUser = userSchema.safeParse(userData);
+          if (!validatedUser.success) {
+            console.error("Invalid user data:", validatedUser.error);
+            return null; // or handle the invalid user data appropriately
+          }
+
+          const user = validatedUser.data;
+
+          return {
+            ...validatedItem.data,
+            avatar: user.avatar,
+            username: user.username,
+            blocked: user.blocked,
+          } as ChatWithUser;
+        });
+
+        const chatData = (await Promise.all(promises)).filter(
+          Boolean
+        ) as ChatWithUser[];
+
+        setChats(
+          chatData.sort(
+            (a, b) =>
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          )
+        );
+      }
+    );
+
+    return () => {
+      unSub();
+    };
+  }, [currentUser?.id!]);
 
   return (
-    <div className="w-[25%] cursor-pointer mb-5 mr-2 flex flex-col gap-6 justify-between">
+    <div className="w-[25%] mb-5 mr-2 flex flex-col gap-6 justify-between">
       <Button
         onClick={() => searchModal.onOpen()}
         className="shadow-sm gap-2 w-full"
@@ -87,8 +98,8 @@ const ChatList = (props: Props) => {
       <ScrollArea className="xl:h-[510px] h-[490px]">
         {
           //todo: map joined users
-          usersList.map((user, index) => (
-            <ChatItem key={index} user={user} />
+          chats.map((chat) => (
+            <ChatItem key={chat.chatId} chat={chat} />
           ))
         }
       </ScrollArea>

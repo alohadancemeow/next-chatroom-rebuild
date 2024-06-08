@@ -20,6 +20,7 @@ import {
   arrayUnion,
   collection,
   doc,
+  getDoc,
   serverTimestamp,
   setDoc,
   updateDoc,
@@ -57,6 +58,36 @@ const UserDialog = ({ users }: Props) => {
     const chatRef = collection(db, "chats");
     const userChatsRef = collection(db, "userchats");
 
+    // Helper function to ensure userChats document exists
+    const ensureUserChatDoc = async (userId: string) => {
+      const userChatDocRef = doc(userChatsRef, userId);
+      const userChatDocSnap = await getDoc(userChatDocRef);
+
+      if (!userChatDocSnap.exists()) {
+        await setDoc(userChatDocRef, { chats: [] });
+      }
+      return userChatDocRef;
+    };
+
+    // Ensure both user chat documents exist
+    const userChatDocRef = await ensureUserChatDoc(user.id);
+    const currentUserChatDocRef = await ensureUserChatDoc(currentUser?.id!);
+
+    // Fetch existing chats for current user
+    const currentUserChatsSnap = await getDoc(currentUserChatDocRef);
+    const currentUserChats = currentUserChatsSnap.data()?.chats || [];
+
+    // Check if a chat with this receiverId already exists
+    const existingChat = currentUserChats.find(
+      (chat: any) => chat.receiverId === user.id
+    );
+
+    if (existingChat) {
+      toast.error("Chat with this user already exists!");
+      setLoading(false);
+      return;
+    }
+
     try {
       const newChatRef = doc(chatRef);
 
@@ -65,18 +96,22 @@ const UserDialog = ({ users }: Props) => {
         messages: [],
       });
 
-      await updateDoc(doc(userChatsRef, user.id), {
+      // Update the new user's chat list
+      await updateDoc(userChatDocRef, {
         chats: arrayUnion({
           chatId: newChatRef.id,
+          isSeen: false,
           lastMessage: "",
           receiverId: currentUser?.id!,
           updatedAt: Date.now(),
         }),
       });
 
-      await updateDoc(doc(userChatsRef, currentUser?.id!), {
+      // Update the current user's chat list
+      await updateDoc(currentUserChatDocRef, {
         chats: arrayUnion({
           chatId: newChatRef.id,
+          isSeen: false,
           lastMessage: "",
           receiverId: user.id,
           updatedAt: Date.now(),
@@ -87,7 +122,7 @@ const UserDialog = ({ users }: Props) => {
       toast.success("Chat created! 🎉");
     } catch (err) {
       console.log(err);
-      toast.success("Something went wrong, Please try again!");
+      toast.error("Something went wrong, Please try again!");
     } finally {
       setLoading(false);
     }

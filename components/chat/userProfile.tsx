@@ -50,7 +50,7 @@ const UserProfile = (props: Props) => {
 
       <Separator className="my-6 w-4/5" />
 
-      {currentUser?.links?.length && (
+      {currentUser?.links?.length !== 0 && (
         <div className="w-full flex flex-col mb-8 gap-1">
           {currentUser?.links?.map((link, index) => (
             <div key={index} className="flex gap-2 items-center">

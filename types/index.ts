@@ -36,3 +36,16 @@ export const profileFormSchema = z.object({
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
+
+export const chatSchema = z.object({
+  chatId: z.string(),
+  isSeen: z.boolean(),
+  lastMessage: z.string().optional(),
+  receiverId: z.string(),
+  updatedAt: z.coerce.date(),
+});
+
+export type ChatShcema = z.infer<typeof chatSchema>;
+
+export type ChatWithUser = ChatShcema &
+  Pick<UserSchema, "avatar" | "username" | "blocked">;
