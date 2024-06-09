@@ -10,9 +10,18 @@ import UserDialog from "../search/userDialog";
 import { auth, db } from "@/lib/firebase";
 import useGetUsers from "@/hooks/use-get-users";
 import { useEffect, useState } from "react";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useUserStore } from "@/states/user-store";
-import { chatSchema, ChatWithUser, userSchema } from "@/types";
+import { chatSchema, ChatShcema, ChatWithUser, userSchema } from "@/types";
+import { useChatStore } from "@/states/chat-store";
 
 type Props = {};
 
@@ -24,6 +33,54 @@ const ChatList = (props: Props) => {
   const searchModal = useSearchModal();
   const { users } = useGetUsers();
   const { currentUser } = useUserStore();
+  const { changeChat } = useChatStore();
+
+  /**
+   * The function `handleSelect` updates the `isSeen` property of a chat message in a user's chats
+   * list and then updates the user's chats in a Firestore database.
+   */
+  const handleSelected = async (chat: ChatWithUser) => {
+    if (!currentUser?.id) return;
+
+    const chatIndex = chats.findIndex((item) => item.chatId === chat.chatId);
+    if (chatIndex === -1) return; // Ensure the chat exists
+
+    // chats[chatIndex].isSeen = true;
+
+    const userChatsRef = doc(db, "userchats", currentUser.id);
+
+    // Find the chat to update
+    const chatToUpdate = chats[chatIndex];
+
+    try {
+      if (chatToUpdate) {
+        // Update the specific chat object
+        const updatedChat = {
+          ...chatToUpdate,
+          isSeen: true,
+          updatedAt: Date.now(),
+        }
+
+        // Create a new array with the updated chat
+        const updatedChats = [
+          ...chats.slice(0, chatIndex),
+          updatedChat,
+          ...chats.slice(chatIndex + 1),
+        ]
+
+        // Update the entire chats array in Firestore
+        await updateDoc(userChatsRef, {
+          chats: updatedChats,
+        });
+
+        // Update the local state
+        setChats(updatedChats);
+        changeChat(updatedChat);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   /* This `useEffect` hook is responsible for fetching and updating the chat data for the current
     user. Here's a breakdown of what it does: */
@@ -38,11 +95,13 @@ const ChatList = (props: Props) => {
         if (!items.length) return;
 
         const promises = items.map(async (item: any) => {
+          // console.log(item, "item");
+
           // Validate the item against the schema
           const validatedItem = chatSchema.safeParse(item);
           if (!validatedItem.success) {
             console.error("Invalid item:", validatedItem.error);
-            return null; // or handle the invalid item appropriately
+            return null;
           }
 
           const userDocRef = doc(db, "users", validatedItem.data.receiverId);
@@ -53,7 +112,7 @@ const ChatList = (props: Props) => {
           const validatedUser = userSchema.safeParse(userData);
           if (!validatedUser.success) {
             console.error("Invalid user data:", validatedUser.error);
-            return null; // or handle the invalid user data appropriately
+            return null;
           }
 
           const user = validatedUser.data;
@@ -96,21 +155,19 @@ const ChatList = (props: Props) => {
       </Button>
 
       <ScrollArea className="xl:h-[510px] h-[490px]">
-        {
-          //todo: map joined users
-          chats.map((chat) => (
-            <ChatItem key={chat.chatId} chat={chat} />
-          ))
-        }
+        {chats.map((chat) => (
+          <ChatItem
+            key={chat.chatId}
+            chat={chat}
+            handleSelected={handleSelected}
+          />
+        ))}
       </ScrollArea>
 
       <Button
         className="shadow-sm gap-2 w-full hover:bg-red-700"
         variant="outline"
-        onClick={() => {
-          auth.signOut();
-          // resetChat();
-        }}
+        onClick={() => auth.signOut()}
       >
         <LogOut />
         <div>Leave ChatRoom</div>

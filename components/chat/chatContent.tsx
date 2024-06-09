@@ -8,68 +8,21 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 
 import EmojiPicker from "emoji-picker-react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useChatStore } from "@/states/chat-store";
+import { messageSchema, MessageSchema } from "@/types";
+import { useUserStore } from "@/states/user-store";
 
 type Props = {};
 
 const ChatContent = (props: Props) => {
-  const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+  const [chatMessage, setChatMessage] = useState<MessageSchema[]>([]);
 
-  const [chatMessage, setChatMessage] = useState([
-    {
-      name: "user1",
-      message: "this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user2",
-      message: "this is a message, this is a message, this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user3",
-      message: "this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user1",
-      message:
-        "this is a message, this is a message, this is a message, this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user5",
-      message: "this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user1",
-      message:
-        "this is a message, this is a message, this is a message, this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user5",
-      message: "this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user1",
-      message: "this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user5",
-      message: "this is a message",
-      momentTime: "2024-06-04",
-    },
-    {
-      name: "user1",
-      message: "this is a message",
-      momentTime: "2024-06-04",
-    },
-  ]);
+  const { currentUser } = useUserStore();
+  const { chat, changeChat } = useChatStore();
 
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -79,17 +32,49 @@ const ChatContent = (props: Props) => {
   };
 
   const handleSend = () => {
-    setChatMessage([
-      ...chatMessage,
-      {
-        message: text,
-        momentTime: "2024-06-04",
-        name: "user1",
-      },
-    ]);
+    // setChatMessage([
+    //   ...chatMessage,
+    //   {
+    //     message: text,
+    //     momentTime: "2024-06-04",
+    //     name: "user1",
+    //   },
+    // ]);
 
     setText("");
   };
+
+  /* This `useEffect` hook is responsible for subscribing to real-time updates for the chat messages
+    in the Firestore database. */
+  useEffect(() => {
+    // if (!currentUser?.id) return;
+
+    // const unSub = onSnapshot(doc(db, "chats", chat?.chatId!), async (res) => {
+    //   const items = res?.data()?.messages || [];
+
+    //   if (!items.length) return;
+
+    //   const promises = items.map(async (item: any) => {
+    //     // console.log(item, "item");
+
+    //     const validatedItem = messageSchema.safeParse(item);
+    //     if (!validatedItem.success) {
+    //       console.error("Invalid item:", validatedItem.error);
+    //       return null;
+    //     }
+
+    //     return { messages: { ...validatedItem } };
+    //   });
+
+    //   const messages = (await Promise.all(promises)).filter(
+    //     Boolean
+    //   ) as MessageSchema[];
+
+    //   setChatMessage(messages);
+    // });
+
+    // return () => unSub();
+  }, [chat?.chatId!, currentUser?.id!]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -100,7 +85,11 @@ const ChatContent = (props: Props) => {
       <div className="flex flex-col justify-between">
         <ScrollArea className="h-[530px] xl:h-[540px]">
           {chatMessage.map((item, index) => (
-            <Message key={index} message={item} />
+            <Message
+              key={index}
+              message={item}
+              isSender={item.senderId === currentUser?.id}
+            />
           ))}
           <div ref={endRef}></div>
         </ScrollArea>

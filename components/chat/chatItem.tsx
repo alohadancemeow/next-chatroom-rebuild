@@ -4,11 +4,15 @@ import { ChatWithUser } from "@/types";
 
 type Props = {
   chat: ChatWithUser;
+  handleSelected: (chat: ChatWithUser) => Promise<void>;
 };
 
-const ChatItem = ({ chat }: Props) => {
+const ChatItem = ({ chat, handleSelected }: Props) => {
   return (
-    <div className="flex items-center cursor-pointer gap-3 justify-start p-3 shadow mb-3 rounded bg-white">
+    <div
+      onClick={() => handleSelected(chat)}
+      className="flex items-center cursor-pointer gap-3 justify-start p-3 shadow mb-3 rounded bg-white"
+    >
       <Avatar
         className={cn("w-14 h-14", !chat.isSeen && "border-4 border-sky-600")}
       >

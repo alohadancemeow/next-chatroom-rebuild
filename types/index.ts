@@ -49,3 +49,12 @@ export type ChatShcema = z.infer<typeof chatSchema>;
 
 export type ChatWithUser = ChatShcema &
   Pick<UserSchema, "avatar" | "username" | "blocked">;
+
+export const messageSchema = z.object({
+  senderId: z.string(),
+  isSeen: z.boolean(),
+  message: z.string(),
+  createdAt: z.coerce.date(),
+});
+
+export type MessageSchema = z.infer<typeof messageSchema>;
