@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Send, SmilePlus } from "lucide-react";
+import { CirclePlus, Send, SmilePlus } from "lucide-react";
 import Message from "./message";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -19,6 +19,7 @@ import { useChatStore } from "@/states/chat-store";
 import { messageSchema, MessageSchema } from "@/types";
 import { useUserStore } from "@/states/user-store";
 import { db } from "@/lib/firebase";
+import useSearchModal from "@/states/search-modal";
 
 type Props = {};
 
@@ -27,8 +28,10 @@ const ChatContent = (props: Props) => {
   const [text, setText] = useState("");
   const [chatMessage, setChatMessage] = useState<MessageSchema[]>([]);
 
+  const searchModal = useSearchModal();
   const { currentUser } = useUserStore();
-  const { chatId, receiverId } = useChatStore();
+  const { chatId, receiverId, isCurrentUserBlocked, isReceiverBlocked } =
+    useChatStore();
 
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -142,45 +145,57 @@ const ChatContent = (props: Props) => {
 
   return (
     <div className="flex flex-grow max-w-[63%] rounded p-5 border border-r-[#ebe7fb] flex-col justify-start">
-      <div className="flex flex-col justify-between">
-        <ScrollArea className="h-[530px] xl:h-[540px]">
-          {chatMessage.map((item, index) => (
-            <Message
-              key={index}
-              message={item}
-              isSender={item.senderId === currentUser?.id}
-            />
-          ))}
-          <div ref={endRef}></div>
-        </ScrollArea>
-
-        <div className="absolute right-[50%] bottom-[21%]">
-          <EmojiPicker open={open} onEmojiClick={handleEmoji} />
+      {!chatMessage.length && (
+        <div className="flex flex-col gap-2 justify-center items-center h-full">
+          <div className="text-4xl font-bold">Getting started 👋</div>
+          <Button variant="outline" onClick={() => searchModal.onOpen()}>
+            <CirclePlus />
+          </Button>
         </div>
+      )}
+      {!!chatMessage.length && (
+        <div className="flex flex-col justify-between">
+          <ScrollArea className="h-[520px] xl:h-[530px]">
+            {chatMessage.map((item, index) => (
+              <Message
+                key={index}
+                message={item}
+                isSender={item.senderId === currentUser?.id}
+              />
+            ))}
+            <div ref={endRef}></div>
+          </ScrollArea>
 
-        <div className="pt-5">
-          <div className="bg-white flex p-2 rounded-lg gap-2">
-            <Button variant="outline" onClick={() => setOpen((prev) => !prev)}>
-              <SmilePlus />
-            </Button>
-            <Input
-              type="text"
-              // placeholder={
-              //   isCurrentUserBlocked || isReceiverBlocked
-              //     ? "You cannot send a message"
-              //     : "Type a message..."
-              // }
-              placeholder="Type a message.."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              // disabled={isCurrentUserBlocked || isReceiverBlocked}
-            />
-            <Button variant="outline" onClick={handleSend}>
-              <Send />
-            </Button>
+          <div className="absolute right-[50%] bottom-[21%]">
+            <EmojiPicker open={open} onEmojiClick={handleEmoji} />
+          </div>
+
+          <div className="pt-5">
+            <div className="bg-white flex p-2 rounded-lg gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setOpen((prev) => !prev)}
+              >
+                <SmilePlus />
+              </Button>
+              <Input
+                type="text"
+                placeholder={
+                  isCurrentUserBlocked || isReceiverBlocked
+                    ? "You cannot send a message"
+                    : "Type a message..."
+                }
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                disabled={isCurrentUserBlocked || isReceiverBlocked}
+              />
+              <Button variant="outline" onClick={handleSend}>
+                <Send />
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

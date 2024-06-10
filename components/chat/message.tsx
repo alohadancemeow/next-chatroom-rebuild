@@ -3,6 +3,8 @@
 import { cn } from "@/lib/utils";
 import { MessageSchema } from "@/types";
 import { CheckCheck } from "lucide-react";
+import { formatRelative } from "date-fns";
+import useGetUsers from "@/hooks/use-get-users";
 
 type Props = {
   message: MessageSchema;
@@ -10,6 +12,8 @@ type Props = {
 };
 
 const Message = ({ message, isSender }: Props) => {
+  const { getUserById } = useGetUsers();
+
   return (
     <div className={cn("flex justify-start", isSender && "justify-end")}>
       <div className="px-2 py-1 break-words">
@@ -19,7 +23,7 @@ const Message = ({ message, isSender }: Props) => {
             isSender && "text-end"
           )}
         >
-          {`${message.senderId} say:`}
+          {`${getUserById(message.senderId)?.username || ""} say:`}
         </p>
         <div className={cn("flex justify-start", isSender && "justify-end")}>
           <p
@@ -36,7 +40,7 @@ const Message = ({ message, isSender }: Props) => {
         >
           {message.isSeen && <CheckCheck size={14} />}
           <p className="text-[#777] text-xs font-normal">
-            {`${message.createdAt}`}
+            {`${formatRelative(message.createdAt, new Date())}`}
           </p>
         </div>
       </div>

@@ -28,11 +28,15 @@ const useGetUsers = () => {
     setUsers(usersList);
   };
 
+  const getUserById = (userId: string) => {
+    return users.filter((user) => user.id === userId)[0];
+  };
+
   useEffect(() => {
     getUsers();
   }, []);
 
-  return { users };
+  return { users, getUserById };
 };
 
 export default useGetUsers;
