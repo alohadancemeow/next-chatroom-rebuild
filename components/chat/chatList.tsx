@@ -20,7 +20,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useUserStore } from "@/states/user-store";
-import { chatSchema, ChatShcema, ChatWithUser, userSchema } from "@/types";
+import { chatSchema, ChatWithUser, userSchema } from "@/types";
 import { useChatStore } from "@/states/chat-store";
 
 type Props = {};
@@ -28,7 +28,7 @@ type Props = {};
 const ChatList = (props: Props) => {
   const [chats, setChats] = useState<ChatWithUser[]>([]);
 
-  console.log("chats", chats);
+  // console.log("chats", chats);
 
   const searchModal = useSearchModal();
   const { users } = useGetUsers();
@@ -42,41 +42,129 @@ const ChatList = (props: Props) => {
   const handleSelected = async (chat: ChatWithUser) => {
     if (!currentUser?.id) return;
 
-    const chatIndex = chats.findIndex((item) => item.chatId === chat.chatId);
-    if (chatIndex === -1) return; // Ensure the chat exists
-
-    // chats[chatIndex].isSeen = true;
-
     const userChatsRef = doc(db, "userchats", currentUser.id);
 
-    // Find the chat to update
-    const chatToUpdate = chats[chatIndex];
+    // Fetch the document
+    const docSnap = await getDoc(userChatsRef);
 
     try {
-      if (chatToUpdate) {
-        // Update the specific chat object
-        const updatedChat = {
-          ...chatToUpdate,
-          isSeen: true,
-          updatedAt: Date.now(),
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const chats = data.chats || [];
+
+        // Find the chat to update
+        const chatIndex = chats.findIndex(
+          (item: any) => item.chatId === chat.chatId
+        );
+        if (chatIndex === -1) return;
+        const chatToUpdate = chats[chatIndex];
+
+        if (chatToUpdate.isSeen) {
+          // Validate the item against the schema
+          const validatedItem = chatSchema.safeParse(chatToUpdate);
+          if (!validatedItem.success) {
+            console.error("Invalid item:", validatedItem.error);
+            return;
+          }
+
+          const userDocRef = doc(db, "users", validatedItem.data.receiverId);
+          const userDocSnap = await getDoc(userDocRef);
+
+          // Validate the user data against the user schema
+          const userData = userDocSnap.data();
+          const validatedUser = userSchema.safeParse(userData);
+          if (!validatedUser.success) {
+            console.error("Invalid user data:", validatedUser.error);
+            return;
+          }
+
+          const user = validatedUser.data;
+
+          const chatWithUser = {
+            ...validatedItem.data,
+            avatar: user.avatar,
+            username: user.username,
+            blocked: user.blocked,
+          } as ChatWithUser;
+
+          return changeChat(chatWithUser);
         }
 
-        // Create a new array with the updated chat
-        const updatedChats = [
-          ...chats.slice(0, chatIndex),
-          updatedChat,
-          ...chats.slice(chatIndex + 1),
-        ]
+        if (chatToUpdate) {
+          const updatedChat = {
+            ...chatToUpdate,
+            isSeen: true,
+            updatedAt: Date.now(),
+          };
 
-        // Update the entire chats array in Firestore
-        await updateDoc(userChatsRef, {
-          chats: updatedChats,
-        });
+          // Remove the old chat and add the updated one
+          await updateDoc(userChatsRef, {
+            chats: arrayRemove(chatToUpdate),
+          });
+          await updateDoc(userChatsRef, {
+            chats: arrayUnion(updatedChat),
+          });
 
-        // Update the local state
-        setChats(updatedChats);
-        changeChat(updatedChat);
+          console.log("Chat updated successfully");
+
+          // Validate the item against the schema
+          const validatedItem = chatSchema.safeParse(chat);
+          if (!validatedItem.success) {
+            console.error("Invalid item:", validatedItem.error);
+            return;
+          }
+
+          const userDocRef = doc(db, "users", validatedItem.data.receiverId);
+          const userDocSnap = await getDoc(userDocRef);
+
+          // Validate the user data against the user schema
+          const userData = userDocSnap.data();
+          const validatedUser = userSchema.safeParse(userData);
+          if (!validatedUser.success) {
+            console.error("Invalid user data:", validatedUser.error);
+            return;
+          }
+
+          const user = validatedUser.data;
+
+          const chatWithUser = {
+            ...validatedItem.data,
+            avatar: user.avatar,
+            username: user.username,
+            blocked: user.blocked,
+          } as ChatWithUser;
+
+          changeChat(chatWithUser);
+        } else {
+          console.error("Chat not found");
+        }
+      } else {
+        console.error("Document does not exist");
       }
+      // if (chatToUpdate) {
+      //   // Update the specific chat object
+      //   const updatedChat = {
+      //     ...chatToUpdate,
+      //     isSeen: true,
+      //     updatedAt: Date.now(),
+      //   };
+
+      //   // Create a new array with the updated chat
+      //   const updatedChats = [
+      //     ...chats.slice(0, chatIndex),
+      //     updatedChat,
+      //     ...chats.slice(chatIndex + 1),
+      //   ];
+
+      //   // Update the entire chats array in Firestore
+      //   await updateDoc(userChatsRef, {
+      //     chats: updatedChats,
+      //   });
+
+      //   // Update the local state
+      //   setChats(updatedChats);
+      //   changeChat(updatedChat);
+      // }
     } catch (err) {
       console.log(err);
     }
@@ -141,7 +229,7 @@ const ChatList = (props: Props) => {
     return () => {
       unSub();
     };
-  }, [currentUser?.id!]);
+  }, []);
 
   return (
     <div className="w-[25%] mb-5 mr-2 flex flex-col gap-6 justify-between">

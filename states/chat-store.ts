@@ -3,16 +3,20 @@ import { useUserStore } from "./user-store";
 import { ChatWithUser } from "@/types";
 
 interface ChatStore {
-  chat: ChatWithUser | null;
+  // chat: ChatWithUser | null;
+  chatId: string;
+  receiverId: string;
   isCurrentUserBlocked: boolean;
   isReceiverBlocked: boolean;
   changeChat: (chat: ChatWithUser) => void;
   changeBlock: () => void;
-  resetChat: (chat: ChatWithUser) => void;
+  resetChat: () => void;
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
-  chat: null,
+  // chat: null,
+  chatId: "",
+  receiverId: "",
   isCurrentUserBlocked: false,
   isReceiverBlocked: false,
   changeChat: (chat) => {
@@ -21,7 +25,8 @@ export const useChatStore = create<ChatStore>((set) => ({
     // CHECK IF CURRENT USER IS BLOCKED
     if (chat.blocked?.includes(currentUser?.id!)) {
       return set({
-        chat,
+        chatId: chat.chatId,
+        receiverId: chat.receiverId,
         isCurrentUserBlocked: true,
         isReceiverBlocked: false,
       });
@@ -30,13 +35,15 @@ export const useChatStore = create<ChatStore>((set) => ({
     // CHECK IF RECEIVER IS BLOCKED
     else if (currentUser?.blocked?.includes(chat.receiverId)) {
       return set({
-        chat,
+        chatId: chat.chatId,
+        receiverId: chat.receiverId,
         isCurrentUserBlocked: false,
         isReceiverBlocked: true,
       });
     } else {
       return set({
-        chat,
+        chatId: chat.chatId,
+        receiverId: chat.receiverId,
         isCurrentUserBlocked: false,
         isReceiverBlocked: false,
       });
@@ -46,11 +53,11 @@ export const useChatStore = create<ChatStore>((set) => ({
   changeBlock: () => {
     set((state) => ({ ...state, isReceiverBlocked: !state.isReceiverBlocked }));
   },
-  resetChat: (chat) => {
+  resetChat: () => {
     set({
-      chat,
-      isCurrentUserBlocked: false,
-      isReceiverBlocked: false,
+      chatId: "",
+      // isCurrentUserBlocked: false,
+      // isReceiverBlocked: false,
     });
   },
 }));

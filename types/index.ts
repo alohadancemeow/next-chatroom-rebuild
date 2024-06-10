@@ -53,7 +53,7 @@ export type ChatWithUser = ChatShcema &
 export const messageSchema = z.object({
   senderId: z.string(),
   isSeen: z.boolean(),
-  message: z.string(),
+  text: z.string(),
   createdAt: z.coerce.date(),
 });
 

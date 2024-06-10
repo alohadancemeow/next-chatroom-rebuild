@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { MessageSchema } from "@/types";
 import { CheckCheck } from "lucide-react";
@@ -17,7 +19,7 @@ const Message = ({ message, isSender }: Props) => {
             isSender && "text-end"
           )}
         >
-          {`${name} say:`}
+          {`${message.senderId} say:`}
         </p>
         <div className={cn("flex justify-start", isSender && "justify-end")}>
           <p
@@ -26,7 +28,7 @@ const Message = ({ message, isSender }: Props) => {
               isSender && "bg-sky-600"
             )}
           >
-            {`${message}`}
+            {`${message.text}`}
           </p>
         </div>
         <div
@@ -34,7 +36,7 @@ const Message = ({ message, isSender }: Props) => {
         >
           {message.isSeen && <CheckCheck size={14} />}
           <p className="text-[#777] text-xs font-normal">
-            {message.time.toISOString()}
+            {`${message.createdAt}`}
           </p>
         </div>
       </div>
