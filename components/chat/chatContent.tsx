@@ -59,8 +59,8 @@ const ChatContent = (props: Props) => {
         const userChatsRef = doc(db, "userchats", id);
         const userChatsSnapshot = await getDoc(userChatsRef);
 
-        const messageRef = doc(db, "chats", chatId);
-        const messageSnapshot = await getDoc(messageRef);
+        // const messageRef = doc(db, "chats", chatId);
+        // const messageSnapshot = await getDoc(messageRef);
 
         if (userChatsSnapshot.exists()) {
           const userChatsData = userChatsSnapshot.data();
@@ -81,21 +81,21 @@ const ChatContent = (props: Props) => {
         }
 
         // read message
-        if (messageSnapshot.exists()) {
-          const messageData = messageSnapshot.data();
+        // if (messageSnapshot.exists()) {
+        //   const messageData = messageSnapshot.data();
 
-          const messageIndex = messageData.messages.findIndex(
-            (c: any) => c.senderId !== id
-          );
-          if (messageIndex === -1) return;
+        //   const messageIndex = messageData.messages.findIndex(
+        //     (c: any) => c.senderId !== id
+        //   );
+        //   if (messageIndex === -1) return;
 
-          messageData.messages[messageIndex].isSeen =
-            id !== currentUser.id ? true : false;
+        //   messageData.messages[messageIndex].isSeen =
+        //     id !== currentUser.id ? true : false;
 
-          await updateDoc(userChatsRef, {
-            messages: messageData.messages,
-          });
-        }
+        //   await updateDoc(userChatsRef, {
+        //     messages: messageData.messages,
+        //   });
+        // }
       });
     } catch (err) {
       console.log(err);
@@ -111,14 +111,14 @@ const ChatContent = (props: Props) => {
 
     setChatMessage([]);
 
+    const messageRef = doc(db, "chats", chatId);
+
     const unSub = onSnapshot(doc(db, "chats", chatId), async (res) => {
       const items = res?.data()?.messages || [];
 
       if (!items.length) return;
 
       const promises = items.map(async (item: any) => {
-        // console.log(item, "item");
-
         const validatedItem = messageSchema.safeParse(item);
         if (!validatedItem.success) {
           console.error("Invalid item:", validatedItem.error);
@@ -145,15 +145,18 @@ const ChatContent = (props: Props) => {
 
   return (
     <div className="flex flex-grow max-w-[63%] rounded p-5 border border-r-[#ebe7fb] flex-col justify-start">
-      {!chatMessage.length && (
+      {!chatId && (
         <div className="flex flex-col gap-2 justify-center items-center h-full">
-          <div className="text-4xl font-bold">Getting started 👋</div>
+          <div className="text-4xl font-bold flex flex-col items-center gap-1">
+            <p className="text-5xl">👋</p>
+            <p>Get started</p>
+          </div>
           <Button variant="outline" onClick={() => searchModal.onOpen()}>
             <CirclePlus />
           </Button>
         </div>
       )}
-      {!!chatMessage.length && (
+      {chatId && (
         <div className="flex flex-col justify-between">
           <ScrollArea className="h-[520px] xl:h-[530px]">
             {chatMessage.map((item, index) => (

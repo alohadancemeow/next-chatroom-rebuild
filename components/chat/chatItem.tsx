@@ -16,7 +16,10 @@ const ChatItem = ({ chat, handleSelected }: Props) => {
       <Avatar
         className={cn("w-14 h-14", !chat.isSeen && "border-4 border-sky-600")}
       >
-        <AvatarImage src="https://github.com/shadcn.png" />
+        <AvatarImage
+          className="object-cover"
+          src={chat.avatar || "https://github.com/shadcn.png"}
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="flex justify-center w-full flex-col items-start">

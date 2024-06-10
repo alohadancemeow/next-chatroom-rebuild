@@ -9,12 +9,12 @@ type Props = {};
 
 const Header = (props: Props) => {
   const settingsModal = useSettingsModal();
-  // const { resetChat } = useChatStore();
+  const { resetChat } = useChatStore();
 
   return (
     <div className="flex items-center justify-between">
       <div
-        // onClick={() => resetChat()}
+        onClick={() => resetChat()}
         className="flex items-center justify-center cursor-pointer gap-3"
       >
         <img src="./chat.svg" alt="logo" className="w-14" />
