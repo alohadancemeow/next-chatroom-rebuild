@@ -25,8 +25,6 @@ const ChatItem = ({ chat, handleSelected }: Props) => {
       <div className="flex justify-center w-full flex-col items-start">
         <div className="flex gap-1 items-center ">
           <div className="font-semibold">{chat.username}</div>
-          {/* <div>-</div>
-          <div className="text-slate-400 text-xs">{chat.updatedAt}</div> */}
         </div>
         <div
           className={cn(

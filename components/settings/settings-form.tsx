@@ -19,16 +19,6 @@ import { Button } from "../ui/button";
 
 import { profileFormSchema, ProfileFormValues, UserSchema } from "@/types";
 import { RotateCcw } from "lucide-react";
-import { link } from "fs";
-
-// This can come from your database or API.
-// const defaultValues: Partial<ProfileFormValues> = {
-//   bio: "I own a computer.",
-//   urls: [
-//     { value: "https://shadcn.com" },
-//     { value: "http://twitter.com/shadcn" },
-//   ],
-// };
 
 type Props = {
   currentUser: UserSchema | null;

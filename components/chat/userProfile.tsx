@@ -53,8 +53,6 @@ const UserProfile = (props: Props) => {
         </div>
         <h4 className="text-[#607d8b] mt-1">{profile?.username}</h4>
         <div className="mt-1 text-xs flex gap-1">
-          {/* <strong>Active : </strong>
-          <p className="italic">5 min ago.</p> */}
           <strong>Status : </strong>
           <p className="italic">{profile?.status || "Hi there! 👋"}</p>
         </div>

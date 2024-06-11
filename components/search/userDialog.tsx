@@ -16,17 +16,10 @@ import UserItem from "./userItem";
 import { UserSchema } from "@/types";
 import { useUserStore } from "@/states/user-store";
 
-import {
-  arrayUnion,
-  collection,
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getDoc } from "firebase/firestore";
 import { toast } from "sonner";
+import { ensureUserChatDoc } from "../helpers/ensure-user-chat-doc";
+import { createNewChat } from "../helpers/create-new-chat";
 
 type Props = {
   users: UserSchema[];
@@ -55,20 +48,6 @@ const UserDialog = ({ users }: Props) => {
   const handleAdd = async (user: UserSchema) => {
     setLoading(true);
 
-    const chatRef = collection(db, "chats");
-    const userChatsRef = collection(db, "userchats");
-
-    // Helper function to ensure userChats document exists
-    const ensureUserChatDoc = async (userId: string) => {
-      const userChatDocRef = doc(userChatsRef, userId);
-      const userChatDocSnap = await getDoc(userChatDocRef);
-
-      if (!userChatDocSnap.exists()) {
-        await setDoc(userChatDocRef, { chats: [] });
-      }
-      return userChatDocRef;
-    };
-
     // Ensure both user chat documents exist
     const userChatDocRef = await ensureUserChatDoc(user.id);
     const currentUserChatDocRef = await ensureUserChatDoc(currentUser?.id!);
@@ -89,33 +68,11 @@ const UserDialog = ({ users }: Props) => {
     }
 
     try {
-      const newChatRef = doc(chatRef);
-
-      await setDoc(newChatRef, {
-        createdAt: serverTimestamp(),
-        messages: [],
-      });
-
-      // Update the new user's chat list
-      await updateDoc(userChatDocRef, {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          isSeen: false,
-          lastMessage: "",
-          receiverId: currentUser?.id!,
-          updatedAt: Date.now(),
-        }),
-      });
-
-      // Update the current user's chat list
-      await updateDoc(currentUserChatDocRef, {
-        chats: arrayUnion({
-          chatId: newChatRef.id,
-          isSeen: false,
-          lastMessage: "",
-          receiverId: user.id,
-          updatedAt: Date.now(),
-        }),
+      await createNewChat({
+        currentUserChatDocRef,
+        userChatDocRef,
+        sender: currentUser!,
+        reciever: user,
       });
 
       searchModal.onClose();

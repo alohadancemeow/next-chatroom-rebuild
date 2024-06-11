@@ -16,7 +16,6 @@ const Tabs = (props: Props) => {
   const containerRef = useRef(null);
 
   const current = state.isLoginActive ? "Register" : "Login";
-  // const currentActive = state.isLoginActive ? "Login" : "Register";
 
   /**
    * The handleChange function toggles the position of a side box element and updates the state to

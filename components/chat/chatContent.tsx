@@ -16,10 +16,11 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useChatStore } from "@/states/chat-store";
-import { messageSchema, MessageSchema } from "@/types";
+import { MessageSchema } from "@/types";
 import { useUserStore } from "@/states/user-store";
 import { db } from "@/lib/firebase";
 import useSearchModal from "@/states/search-modal";
+import { messageValidator } from "../helpers/validator";
 
 type Props = {};
 
@@ -97,13 +98,10 @@ const ChatContent = (props: Props) => {
       if (!items.length) return;
 
       const promises = items.map(async (item: any) => {
-        const validatedItem = messageSchema.safeParse(item);
-        if (!validatedItem.success) {
-          console.error("Invalid item:", validatedItem.error);
-          return null;
-        }
+        const validatedMessage = messageValidator(item);
+        if (!validatedMessage?.data) return;
 
-        return validatedItem;
+        return validatedMessage;
       });
 
       const messages = (await Promise.all(promises)).filter(Boolean);

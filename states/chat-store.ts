@@ -3,7 +3,6 @@ import { useUserStore } from "./user-store";
 import { ChatWithUser } from "@/types";
 
 interface ChatStore {
-  // chat: ChatWithUser | null;
   chatId: string;
   receiverId: string;
   isCurrentUserBlocked: boolean;
@@ -14,7 +13,6 @@ interface ChatStore {
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
-  // chat: null,
   chatId: "",
   receiverId: "",
   isCurrentUserBlocked: false,
