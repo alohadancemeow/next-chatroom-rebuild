@@ -59,9 +59,6 @@ const ChatContent = (props: Props) => {
         const userChatsRef = doc(db, "userchats", id);
         const userChatsSnapshot = await getDoc(userChatsRef);
 
-        // const messageRef = doc(db, "chats", chatId);
-        // const messageSnapshot = await getDoc(messageRef);
-
         if (userChatsSnapshot.exists()) {
           const userChatsData = userChatsSnapshot.data();
 
@@ -79,23 +76,6 @@ const ChatContent = (props: Props) => {
             chats: userChatsData.chats,
           });
         }
-
-        // read message
-        // if (messageSnapshot.exists()) {
-        //   const messageData = messageSnapshot.data();
-
-        //   const messageIndex = messageData.messages.findIndex(
-        //     (c: any) => c.senderId !== id
-        //   );
-        //   if (messageIndex === -1) return;
-
-        //   messageData.messages[messageIndex].isSeen =
-        //     id !== currentUser.id ? true : false;
-
-        //   await updateDoc(userChatsRef, {
-        //     messages: messageData.messages,
-        //   });
-        // }
       });
     } catch (err) {
       console.log(err);
@@ -110,8 +90,6 @@ const ChatContent = (props: Props) => {
     if (!currentUser?.id || !chatId) return;
 
     setChatMessage([]);
-
-    const messageRef = doc(db, "chats", chatId);
 
     const unSub = onSnapshot(doc(db, "chats", chatId), async (res) => {
       const items = res?.data()?.messages || [];
