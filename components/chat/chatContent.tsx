@@ -20,7 +20,7 @@ import { MessageSchema } from "@/types";
 import { useUserStore } from "@/states/user-store";
 import { db } from "@/lib/firebase";
 import useSearchModal from "@/states/search-modal";
-import { messageValidator } from "../helpers/validator";
+import { messageValidator } from "../../helpers/validator";
 
 type Props = {};
 

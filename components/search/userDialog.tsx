@@ -18,8 +18,8 @@ import { useUserStore } from "@/states/user-store";
 
 import { getDoc } from "firebase/firestore";
 import { toast } from "sonner";
-import { ensureUserChatDoc } from "../helpers/ensure-user-chat-doc";
-import { createNewChat } from "../helpers/create-new-chat";
+import { ensureUserChatDoc } from "../../helpers/ensure-user-chat-doc";
+import { createNewChat } from "../../helpers/create-new-chat";
 
 type Props = {
   users: UserSchema[];

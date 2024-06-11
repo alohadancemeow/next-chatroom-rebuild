@@ -21,7 +21,7 @@ import {
 import { useUserStore } from "@/states/user-store";
 import { ChatWithUser } from "@/types";
 import { useChatStore } from "@/states/chat-store";
-import { combineChatWithUser } from "../helpers/combine-chat-with-user";
+import { combineChatWithUser } from "../../helpers/combine-chat-with-user";
 
 type Props = {};
 
