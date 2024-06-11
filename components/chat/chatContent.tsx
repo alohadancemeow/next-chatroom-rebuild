@@ -156,6 +156,7 @@ const ChatContent = (props: Props) => {
               <Button
                 variant="outline"
                 onClick={() => setOpen((prev) => !prev)}
+                disabled={isCurrentUserBlocked || isReceiverBlocked}
               >
                 <SmilePlus />
               </Button>
@@ -170,7 +171,11 @@ const ChatContent = (props: Props) => {
                 onChange={(e) => setText(e.target.value)}
                 disabled={isCurrentUserBlocked || isReceiverBlocked}
               />
-              <Button variant="outline" onClick={handleSend}>
+              <Button
+                variant="outline"
+                onClick={handleSend}
+                disabled={isCurrentUserBlocked || isReceiverBlocked}
+              >
                 <Send />
               </Button>
             </div>

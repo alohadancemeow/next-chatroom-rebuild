@@ -33,7 +33,12 @@ const ChatList = (props: Props) => {
   const searchModal = useSearchModal();
   const { users } = useGetUsers();
   const { currentUser } = useUserStore();
-  const { changeChat } = useChatStore();
+  const { changeChat, resetChat } = useChatStore();
+
+  const handleLeave = () => {
+    auth.signOut();
+    resetChat();
+  };
 
   /**
    * The function `handleSelect` updates the `isSeen` property of a chat message in a user's chats
@@ -255,7 +260,7 @@ const ChatList = (props: Props) => {
       <Button
         className="shadow-sm gap-2 w-full hover:bg-red-700"
         variant="outline"
-        onClick={() => auth.signOut()}
+        onClick={handleLeave}
       >
         <LogOut />
         <div>Leave ChatRoom</div>
