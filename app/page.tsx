@@ -10,7 +10,6 @@ import Room from "./home/page";
 
 export default function Home() {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
-  // const { chatId } = useChatStore();
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
