@@ -2,9 +2,7 @@
 
 I'm excited to introduce ChatRoom 👋, a mini real-time chat application built using Next + Firebase. 
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-ChatRoom allows users to connect and have conversations in a web browser, fostering instant communication and collaboration.  This lightweight app is ideal for:
+**ChatRoom** allows users to connect and have conversations in a web browser, fostering instant communication and collaboration.  This lightweight app is ideal for:
 
 * **Small group discussions:** Perfect for brainstorming sessions, team huddles, or online study groups.
 * **Casual conversations:** Connect with friends and family in real-time for quick chats.
@@ -24,7 +22,7 @@ NEXT_PUBLIC_API_KEY=
 
 **Try it out 🚀!**
 
-Visit ChatRoom at [ChatRoom](ChatRoom (alien-paratext-321411.web.app)) to experience real-time chat in action.
+Visit ChatRoom at [ChatRoom](https://alien-paratext-321411.web.app/) to experience real-time chat in action.
 
 I look forward to your feedback on ChatRoom! 
 
