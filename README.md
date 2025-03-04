@@ -1,6 +1,6 @@
-## ChatRoom: A Real-Time Chat Web App
+![next-chatroom-rebuild](https://socialify.git.ci/alohadancemeow/next-chatroom-rebuild/image?forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light)
 
-![image](public/Screenshot.png)
+## ChatRoom: A Real-Time Chat Web App
 
 **ChatRoom** 👋, a mini real-time chat application built using Next + Firebase. Allowing users to connect and have conversations in a web browser, fostering instant communication and collaboration.  This lightweight app is ideal for:
 
@@ -37,3 +37,6 @@ I look forward to your feedback on ChatRoom!
 | `npm run build`   | Builds the project for production. |  
 | `npm start`       | Runs the production server.        |  
 | `npm install`     | Installs dependencies.             |  
+
+## 📷 Screenshort
+![image](public/Screenshot.png)
