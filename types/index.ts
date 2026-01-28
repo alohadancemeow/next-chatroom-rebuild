@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod"; 
 
 export const userSchema = z.object({
   id: z.string(),
@@ -45,9 +45,9 @@ export const chatSchema = z.object({
   updatedAt: z.coerce.date(),
 });
 
-export type ChatShcema = z.infer<typeof chatSchema>;
+export type ChatSchema = z.infer<typeof chatSchema>;
 
-export type ChatWithUser = ChatShcema &
+export type ChatWithUser = ChatSchema &
   Pick<UserSchema, "avatar" | "username" | "blocked">;
 
 export const messageSchema = z.object({

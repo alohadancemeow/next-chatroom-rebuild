@@ -12,22 +12,22 @@ const Header = (props: Props) => {
   const { resetChat } = useChatStore();
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between h-14 border-b px-4 bg-background">
       <div
         onClick={() => resetChat()}
-        className="flex items-center justify-center cursor-pointer gap-3"
+        className="flex items-center justify-center cursor-pointer gap-2"
       >
-        <img src="./chat.svg" alt="logo" className="w-14" />
-        <p className="text-xl font-semibold opacity-80 text-black">
-          Let's Chat
+        <img src="./chat.svg" alt="logo" className="w-8 h-8" />
+        <p className="text-lg font-medium tracking-tight">
+          Let’s Chat
         </p>
       </div>
 
       <div
-        className="mr-4 cursor-pointer"
+        className="cursor-pointer p-2 hover:bg-muted rounded-full transition-colors"
         onClick={() => settingsModal.onOpen()}
       >
-        <Settings />
+        <Settings className="w-5 h-5 text-muted-foreground" />
       </div>
       <SettingsDialog />
     </div>

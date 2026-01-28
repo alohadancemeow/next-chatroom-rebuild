@@ -3,8 +3,9 @@
 import { cn } from "@/lib/utils";
 import { MessageSchema } from "@/types";
 import { CheckCheck } from "lucide-react";
-import { formatRelative } from "date-fns";
+import { format } from "date-fns";
 import useGetUsers from "@/hooks/use-get-users";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type Props = {
   message: MessageSchema;
@@ -13,37 +14,59 @@ type Props = {
 
 const Message = ({ message, isSender }: Props) => {
   const { getUserById } = useGetUsers();
+  const user = getUserById(message.senderId);
 
   return (
-    <div className={cn("flex justify-start", isSender && "justify-end")}>
-      <div className="px-2 py-1 break-words">
-        <p
+    <div
+      className={cn(
+        "flex w-full gap-2 mb-4",
+        isSender ? "justify-end" : "justify-start"
+      )}
+    >
+      {!isSender && (
+        <Avatar className="w-8 h-8 mt-1">
+          <AvatarImage
+            className="object-cover"
+            src={user?.avatar || "https://github.com/shadcn.png"}
+          />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      )}
+
+      <div className={cn("flex flex-col max-w-[70%]", isSender && "items-end")}>
+        <div className="flex items-center gap-2 mb-1">
+          {!isSender && (
+            <span className="text-xs font-bold text-slate-700">
+              {user?.username}
+            </span>
+          )}
+          <span className="text-[10px] text-slate-400">
+            {format(message.createdAt, "hh:mm a")}
+          </span>
+          {isSender && <span className="text-xs font-bold text-slate-700">Me</span>}
+        </div>
+
+        <div
           className={cn(
-            "opacity-70 m-1 text-xs text-[#0e81ce]",
-            isSender && "text-end"
+            "px-4 py-3 rounded-2xl shadow-sm text-sm leading-relaxed",
+            isSender
+              ? "bg-blue-500 text-white rounded-tr-sm"
+              : "bg-white border border-slate-100 text-slate-600 rounded-tl-sm"
           )}
         >
-          {`${getUserById(message.senderId)?.username || ""} say:`}
-        </p>
-        <div className={cn("flex justify-start", isSender && "justify-end")}>
-          <p
-            className={cn(
-              "px-3 py-1 w-fit mb-1 rounded-lg text-white bg-gray-500",
-              isSender && "bg-sky-600"
-            )}
-          >
-            {`${message.text}`}
-          </p>
-        </div>
-        <div
-          className={cn("flex items-center gap-1", isSender && "justify-end")}
-        >
-          {message.isSeen && <CheckCheck size={14} />}
-          <p className="text-[#777] text-xs font-normal">
-            {`${formatRelative(message.createdAt, new Date())}`}
-          </p>
+          {message.text}
         </div>
       </div>
+
+      {isSender && (
+        <div className="flex flex-col justify-end">
+          {message.isSeen && (
+            <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+              <CheckCheck size={10} className="text-white" />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

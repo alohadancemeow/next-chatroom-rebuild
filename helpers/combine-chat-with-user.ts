@@ -11,7 +11,7 @@ const getUserSnapshot = async (userId: string) => {
   return userData;
 };
 
-export const combineChatWithUser = async (chatData: any) => {
+export const combineChatWithUser = async (chatData: unknown) => {
   const validatedChat = chatValidator(chatData);
   if (!validatedChat?.data) return;
 

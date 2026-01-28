@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { ChatWithUser } from "@/types";
+import { useChatStore } from "@/states/chat-store";
+import { formatDistanceToNow } from "date-fns";
 
 type Props = {
   chat: ChatWithUser;
@@ -8,31 +10,52 @@ type Props = {
 };
 
 const ChatItem = ({ chat, handleSelected }: Props) => {
+  const { chatId } = useChatStore();
+  const isActive = chatId === chat.chatId;
+
   return (
     <div
       onClick={() => handleSelected(chat)}
-      className="flex items-center cursor-pointer gap-3 justify-start p-3 shadow mb-3 rounded bg-white"
+      className={cn(
+        "flex items-center cursor-pointer gap-3 justify-start p-3 rounded-2xl transition-all duration-200 group relative",
+        isActive ? "bg-blue-50" : "hover:bg-slate-50 bg-white"
+      )}
     >
-      <Avatar
-        className={cn("w-14 h-14", !chat.isSeen && "border-4 border-sky-600")}
-      >
-        <AvatarImage
-          className="object-cover"
-          src={chat.avatar || "https://github.com/shadcn.png"}
-        />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
-      <div className="flex justify-center w-full flex-col items-start">
-        <div className="flex gap-1 items-center ">
-          <div className="font-semibold">{chat.username}</div>
+      <div className="relative">
+        <Avatar className="w-12 h-12">
+          <AvatarImage
+            className="object-cover"
+            src={chat.avatar || "https://github.com/shadcn.png"}
+          />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        {/* Online Indicator (Mock logic) */}
+        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+      </div>
+
+      <div className="flex justify-center w-full flex-col items-start overflow-hidden">
+        <div className="flex justify-between w-full items-center mb-0.5">
+          <div className="font-bold text-sm text-slate-700">{chat.username}</div>
+          {isActive ? (
+            <span className="text-[10px] font-bold text-blue-500">Active</span>
+          ) : (
+            <span className="text-[10px] text-slate-400">
+              {chat.updatedAt
+                ? formatDistanceToNow(chat.updatedAt, { addSuffix: true })
+                    .replace("about ", "")
+                    .replace(" ago", "")
+                : "New"}
+            </span>
+          )}
         </div>
         <div
           className={cn(
-            "line-clamp-2 text-slate-400 text-xs",
-            !chat.isSeen && "font-semibold text-slate-700"
+            "line-clamp-1 text-xs w-full truncate",
+            isActive ? "text-blue-400 font-medium" : "text-slate-400 group-hover:text-slate-500",
+            !chat.isSeen && !isActive && "font-bold text-slate-800"
           )}
         >
-          {chat.lastMessage}
+          {chat.lastMessage || "Start a conversation"}
         </div>
       </div>
     </div>
