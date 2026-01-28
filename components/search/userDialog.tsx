@@ -79,7 +79,6 @@ const UserDialog = ({ users }: Props) => {
       searchModal.onClose();
       toast.success("Chat created! 🎉");
     } catch (err) {
-      console.log(err);
       toast.error("Something went wrong, Please try again!");
     } finally {
       setLoading(false);

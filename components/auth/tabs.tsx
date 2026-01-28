@@ -5,16 +5,12 @@ import Login from "./login";
 import Register from "./register";
 import SideBox from "./sideBox";
 
-type Props = {};
-
-const Tabs = (props: Props) => {
+const Tabs = () => {
   const [state, setState] = useState({
     isLoginActive: true,
   });
 
   const sideBoxRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef(null);
-
   const current = state.isLoginActive ? "Register" : "Login";
 
   /**
@@ -35,30 +31,19 @@ const Tabs = (props: Props) => {
         ...state,
         isLoginActive: !state.isLoginActive,
       });
-    } else {
-      console.error("sideBoxRef is not assigned to a DOM element");
     }
   };
 
   useEffect(() => {
     if (sideBoxRef.current) {
       sideBoxRef.current.classList.add("right");
-    } else {
-      console.error("sideBoxRef is not assigned to a DOM element");
     }
   }, []);
 
   return (
     <>
-      <div
-        className="flex bg-white relative z-20 h-full w-full py-4 px-2 shadow-lg rounded"
-        ref={containerRef}
-      >
-        {state.isLoginActive ? (
-          <Login containerRef={(ref: any) => (containerRef.current = ref)} />
-        ) : (
-          <Register containerRef={(ref: any) => (containerRef.current = ref)} />
-        )}
+      <div className="flex bg-white relative z-20 h-full w-full py-4 px-2 shadow-lg rounded">
+        {state.isLoginActive ? <Login /> : <Register />}
       </div>
 
       <SideBox

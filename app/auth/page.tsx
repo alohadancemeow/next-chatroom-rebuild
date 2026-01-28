@@ -1,8 +1,6 @@
 import Tabs from "@/components/auth/tabs";
 
-type Props = {};
-
-const Auth = (props: Props) => {
+const Auth = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="mb-4 text-center text-sm text-blue-600 bg-blue-50 border border-blue-200 p-3 rounded-lg">

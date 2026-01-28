@@ -22,9 +22,7 @@ import { db } from "@/lib/firebase";
 import useSearchModal from "@/states/search-modal";
 import { messageValidator } from "../../helpers/validator";
 
-type Props = {};
-
-const ChatContent = (props: Props) => {
+const ChatContent = () => {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [chatMessage, setChatMessage] = useState<MessageSchema[]>([]);

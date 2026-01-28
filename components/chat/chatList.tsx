@@ -26,9 +26,7 @@ import useSettingsModal from "@/states/settings-modal";
 import SettingsDialog from "../settings/settings-dialog";
 import { Input } from "../ui/input";
 
-type Props = {};
-
-const ChatList = (props: Props) => {
+const ChatList = () => {
   const [chats, setChats] = useState<ChatWithUser[]>([]);
 
   const searchModal = useSearchModal();

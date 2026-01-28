@@ -11,9 +11,7 @@ import useGetUsers from "@/hooks/use-get-users";
 import { db } from "@/lib/firebase";
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 
-type Props = {};
-
-const UserProfile = (props: Props) => {
+const UserProfile = () => {
   const { receiverId, changeBlock, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
   const { currentUser } = useUserStore();

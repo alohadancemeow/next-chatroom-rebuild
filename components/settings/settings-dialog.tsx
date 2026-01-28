@@ -26,9 +26,7 @@ type ImgState = {
   url: string;
 };
 
-type Props = {};
-
-const SettingsDialog = (props: Props) => {
+const SettingsDialog = () => {
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState<ImgState>({
     file: null,
@@ -83,7 +81,6 @@ const SettingsDialog = (props: Props) => {
       fetchUserInfo(currentUser?.id!);
       settingsModal.onClose();
     } catch (error) {
-      console.log(error);
       toast.error("Somthing went wrong, Please try again!");
     } finally {
       setLoading(false);
