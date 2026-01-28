@@ -12,8 +12,8 @@ const Room = (props: Props) => {
   const { chatId } = useChatStore();
 
   return (
-    <div className="flex items-center justify-center h-screen w-full bg-[#1c2c36]">
-      <main className="flex w-[95%] h-[90vh] max-w-[1400px] bg-white rounded-[30px] overflow-hidden shadow-2xl relative">
+    <div className="flex items-center justify-center h-screen w-full ">
+      <main className="flex w-[95%] h-[90vh] max-w-[1200px] bg-white rounded-[30px] overflow-hidden shadow-2xl relative">
         {/* Sidebar / Chat List */}
         <aside
           className={cn(

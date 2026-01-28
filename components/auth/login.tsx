@@ -32,6 +32,7 @@ const formSchema = z.object({
 
 const Login = ({ containerRef }: Props) => {
   const [loading, setLoading] = useState(false);
+  const userSvg = "/user.svg"
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,7 +69,7 @@ const Login = ({ containerRef }: Props) => {
 
       <div className="flex flex-col">
         <div className="w-[350px]">
-          <img src="/user.svg" alt="logo" className="w-full h-full" />
+          <img src={userSvg} alt="logo" className="w-full h-full" />
         </div>
         <div className="p-8">
           <Form {...form}>
